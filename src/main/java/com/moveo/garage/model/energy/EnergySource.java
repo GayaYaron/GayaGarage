@@ -1,4 +1,4 @@
-package com.moveo.garage.model;
+package com.moveo.garage.model.energy;
 
 public enum EnergySource {
 	BATTERY, FUEL_TANK

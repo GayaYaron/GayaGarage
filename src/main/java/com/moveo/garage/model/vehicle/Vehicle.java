@@ -15,8 +15,9 @@ import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.moveo.garage.model.EnergySource;
+import com.moveo.garage.exception.MismatchingWheelAmountException;
 import com.moveo.garage.model.Wheel;
+import com.moveo.garage.model.energy.EnergySource;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,4 +40,29 @@ public abstract class Vehicle {
 	@JsonIgnore
 	@OneToMany(mappedBy = "vehicle")
 	private Set<Wheel> wheels;
+	protected Integer wheelAmount;
+
+	/*
+	 * I have chosen to add the method to the model because it is part of the
+	 * definition of the vehicle itself- therefore belongs here and not in a service
+	 */
+	/**
+	 * sets the vehicle's wheels to the given wheels if the amount matches the
+	 * vehicle needed wheel amount
+	 * 
+	 * @param wheels
+	 * @throws MismatchingWheelAmountException if the amount of given wheels (the
+	 *                                         size of the set) does not match the
+	 *                                         required amount
+	 */
+	public void setWheels(Set<Wheel> wheels) {
+		int amount = wheels.size();
+		if (amount == wheelAmount) {
+			this.wheels = wheels;
+		} else {
+			throw new MismatchingWheelAmountException(this.getClass().getSimpleName(), wheelAmount, amount);
+		}
+	}
+	
+	
 }
