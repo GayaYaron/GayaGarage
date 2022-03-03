@@ -16,15 +16,13 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.moveo.garage.exception.MismatchingWheelAmountException;
+import com.moveo.garage.model.EnergySource;
 import com.moveo.garage.model.Wheel;
-import com.moveo.garage.model.energy.EnergySource;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Entity
-@Data
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "vehicle_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Vehicle {
@@ -63,6 +61,50 @@ public abstract class Vehicle {
 		} else {
 			throw new MismatchingWheelAmountException(this.getClass().getSimpleName(), wheelAmount, amount);
 		}
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public EnergySource getEnergySource() {
+		return energySource;
+	}
+
+	public void setEnergySource(EnergySource energySource) {
+		this.energySource = energySource;
+	}
+
+	public String getModuleName() {
+		return moduleName;
+	}
+
+	public void setModuleName(String moduleName) {
+		this.moduleName = moduleName;
+	}
+
+	public Double getAvailableEnergyPercentage() {
+		return availableEnergyPercentage;
+	}
+
+	public void setAvailableEnergyPercentage(Double availableEnergyPercentage) {
+		this.availableEnergyPercentage = availableEnergyPercentage;
+	}
+
+	public String getLicence() {
+		return licence;
+	}
+
+	public void setLicence(String licence) {
+		this.licence = licence;
+	}
+
+	public List<Wheel> getWheels() {
+		return wheels;
 	}
 	
 	
