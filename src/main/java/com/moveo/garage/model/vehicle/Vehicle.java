@@ -1,6 +1,6 @@
 package com.moveo.garage.model.vehicle;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -35,11 +35,12 @@ public abstract class Vehicle {
 	private EnergySource energySource;
 	private String moduleName;
 	private Double availableEnergyPercentage;
+	private String licence;
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@JsonIgnore
 	@OneToMany(mappedBy = "vehicle")
-	private Set<Wheel> wheels;
+	private List<Wheel> wheels;
 	protected Integer wheelAmount;
 
 	/*
@@ -55,7 +56,7 @@ public abstract class Vehicle {
 	 *                                         size of the set) does not match the
 	 *                                         required amount
 	 */
-	public void setWheels(Set<Wheel> wheels) {
+	public void setWheels(List<Wheel> wheels) {
 		int amount = wheels.size();
 		if (amount == wheelAmount) {
 			this.wheels = wheels;
