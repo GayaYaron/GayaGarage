@@ -71,7 +71,7 @@ public class VehicleController {
 		return ResponseEntity.ok(service.getAllVehiclesEnergySorted());
 	}
 	
-	@PutMapping(value = "inflate")
+	@PutMapping(value = "inflate/license")
 	public ResponseEntity<Void> inflate(@RequestParam String license) {
 		service.inflateTires(license);
 		return ResponseEntity.ok().build();
