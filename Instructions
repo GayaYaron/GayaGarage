@@ -1,0 +1,21 @@
+Installation and running instructions
+
+	The database:
+For this exercise, the database will be created on the computer under the name "gaya_garage".
+Under src/main/resources, in file application.properties you can find this declaration, along with the username and password.
+*This is, of course, not how a database should be created in a real website! It is only for the exercise.
+
+Change the username and password as needed.
+Make sure you do not already have a database called "gaya_garage". If you do- either delete the existing database or change the database name in application.properties.
+
+
+	Running:
+Run "GarageApplication.java" (in package com.moveo.garage).
+You can now send requests from your browser/ your chosen source of http requests.
+The url will be "localhost:8080/vehicle" and then the specific additions of the methods as specified in the VehicleController.
+*Notice- in methods that request a vehicle in the request body, vehicle is an abstract class!
+         Therefore, you must add a field called "vehicle_type" with a value that matches one of the names in the JsonSubTypes list, listed in the Vehicle class in package com.moveo.garage.model
+
+         
+    Swagger:
+To use swagger, run the application and put the url http://localhost:8080/swagger-ui/index.html in your browser.

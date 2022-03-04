@@ -125,9 +125,11 @@ public class VehicleService {
 	 * @throws NullException- if licence is null
 	 * @throws NotFoundException - if no such vehicle was found
 	 */
+	@Transactional(readOnly = false)
 	public void inflateTires(String license) {
 		Vehicle vehicle = getByLicense(license);
-		inflateTires(vehicle);
+		vehicle.inflateTires();
+		repo.save(vehicle);
 	}
 	
 	/**
@@ -136,16 +138,14 @@ public class VehicleService {
 	 * @throws NullException- if id is null
 	 * @throws NotFoundException - if no such vehicle was found
 	 */
+	@Transactional(readOnly = false)
 	public void inflateTires(Integer vehicleId) {
 		nullUtil.check(vehicleId, "vehicle id", "inflate tires");
 		Optional<Vehicle> optionalVehicle = repo.findById(vehicleId);
 		if(optionalVehicle.isEmpty()) {
 			throw new NotFoundException("vehicle");
 		}
-		inflateTires(optionalVehicle.get());
-	}
-	
-	private void inflateTires(Vehicle vehicle) {
+		Vehicle vehicle = optionalVehicle.get();
 		vehicle.inflateTires();
 		repo.save(vehicle);
 	}
