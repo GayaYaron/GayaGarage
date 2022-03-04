@@ -1,6 +1,8 @@
-package com.moveo.garage.exception;
+package com.moveo.garage.exception.util;
 
 import org.springframework.stereotype.Component;
+
+import com.moveo.garage.exception.NullException;
 
 @Component
 public class NullUtil {

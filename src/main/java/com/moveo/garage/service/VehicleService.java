@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.moveo.garage.exception.NotFoundException;
-import com.moveo.garage.exception.NullUtil;
+import com.moveo.garage.exception.util.NullUtil;
 import com.moveo.garage.model.vehicle.Vehicle;
 import com.moveo.garage.repository.VehicleRepository;
 
@@ -99,7 +99,7 @@ public class VehicleService {
 	 * 
 	 * @return all the vehicles sorted by licence in ascending order
 	 */
-	public List<Vehicle> getAllVehiclesLicenceSorted() {
+	public List<Vehicle> getAllVehiclesLicenseSorted() {
 		return repo.findByOrderByLicenseAsc();
 	}
 	

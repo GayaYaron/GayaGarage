@@ -62,7 +62,7 @@ public class GarageApplication {
 		System.out.println(service.getOneVehicle("PH2K687L"));
 		
 		System.out.println("/n                all sorted by license:");
-		System.out.println(service.getAllVehiclesLicenceSorted());
+		System.out.println(service.getAllVehiclesLicenseSorted());
 		
 		System.out.println("/n                all sorted by energy:");
 		System.out.println(service.getAllVehiclesEnergySorted());
