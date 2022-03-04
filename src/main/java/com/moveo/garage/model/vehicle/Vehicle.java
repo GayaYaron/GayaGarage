@@ -7,6 +7,7 @@ import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,10 +20,11 @@ import com.moveo.garage.exception.MismatchingWheelAmountException;
 import com.moveo.garage.model.EnergySource;
 import com.moveo.garage.model.Wheel;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.NoArgsConstructor;
+
 
 @Entity
+@NoArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "vehicle_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Vehicle {
@@ -31,20 +33,14 @@ public abstract class Vehicle {
 	private Integer id;
 	@Enumerated(value = EnumType.STRING)
 	private EnergySource energySource;
-	private String moduleName;
+	private String modelName;
 	private Double availableEnergyPercentage;
-	private String licence;
-	@EqualsAndHashCode.Exclude
-	@ToString.Exclude
+	private String license;
 	@JsonIgnore
-	@OneToMany(mappedBy = "vehicle")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "vehicle")
 	private List<Wheel> wheels;
 	protected Integer wheelAmount;
 
-	/*
-	 * I have chosen to add the method to the model because it is part of the
-	 * definition of the vehicle itself- therefore belongs here and not in a service
-	 */
 	/**
 	 * sets the vehicle's wheels to the given wheels if the amount matches the
 	 * vehicle needed wheel amount
@@ -79,12 +75,12 @@ public abstract class Vehicle {
 		this.energySource = energySource;
 	}
 
-	public String getModuleName() {
-		return moduleName;
+	public String getModelName() {
+		return modelName;
 	}
 
-	public void setModuleName(String moduleName) {
-		this.moduleName = moduleName;
+	public void setModuleName(String modelName) {
+		this.modelName = modelName;
 	}
 
 	public Double getAvailableEnergyPercentage() {
@@ -95,17 +91,90 @@ public abstract class Vehicle {
 		this.availableEnergyPercentage = availableEnergyPercentage;
 	}
 
-	public String getLicence() {
-		return licence;
+	public String getLicense() {
+		return license;
 	}
 
-	public void setLicence(String licence) {
-		this.licence = licence;
+	public void setLicense(String license) {
+		this.license = license;
 	}
 
 	public List<Wheel> getWheels() {
 		return wheels;
 	}
 	
+	public void addEnergy() {
+		setAvailableEnergyPercentage(100.0);
+	}
 	
+	public void inflateTires() {
+		for (Wheel wheel : wheels) {
+			wheel.inflate();
+		}
+	}
+
+	public Vehicle(String modelName, Double availableEnergyPercentage, String license) {
+		super();
+		this.modelName = modelName;
+		this.availableEnergyPercentage = availableEnergyPercentage;
+		this.license = license;
+	}
+
+	@Override
+	public String toString() {
+		return "Vehicle [energySource=" + energySource + ", modelName=" + modelName + ", availableEnergyPercentage="
+				+ availableEnergyPercentage + ", license=" + license + ", wheels=" + wheels + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((availableEnergyPercentage == null) ? 0 : availableEnergyPercentage.hashCode());
+		result = prime * result + ((energySource == null) ? 0 : energySource.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((license == null) ? 0 : license.hashCode());
+		result = prime * result + ((modelName == null) ? 0 : modelName.hashCode());
+		result = prime * result + ((wheelAmount == null) ? 0 : wheelAmount.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Vehicle other = (Vehicle) obj;
+		if (availableEnergyPercentage == null) {
+			if (other.availableEnergyPercentage != null)
+				return false;
+		} else if (!availableEnergyPercentage.equals(other.availableEnergyPercentage))
+			return false;
+		if (energySource != other.energySource)
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (license == null) {
+			if (other.license != null)
+				return false;
+		} else if (!license.equals(other.license))
+			return false;
+		if (modelName == null) {
+			if (other.modelName != null)
+				return false;
+		} else if (!modelName.equals(other.modelName))
+			return false;
+		if (wheelAmount == null) {
+			if (other.wheelAmount != null)
+				return false;
+		} else if (!wheelAmount.equals(other.wheelAmount))
+			return false;
+		return true;
+	}
 }

@@ -1,5 +1,6 @@
 package com.moveo.garage.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,5 +10,8 @@ import com.moveo.garage.model.vehicle.Vehicle;
 
 @Repository
 public interface VehicleRepository extends JpaRepository<Vehicle, Integer>{
-	public Optional<Vehicle> findByLicence(String licence);
+	public Optional<Vehicle> findByLicense(String license);
+	public List<Vehicle> findByOrderByLicenseAsc();
+	public List<Vehicle> findByOrderByModelNameAsc();
+	public List<Vehicle> findByOrderByAvailableEnergyPercentageDesc();
 }

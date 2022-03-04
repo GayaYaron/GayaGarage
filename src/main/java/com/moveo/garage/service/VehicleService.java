@@ -9,18 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.moveo.garage.exception.NotFoundException;
 import com.moveo.garage.exception.NullUtil;
-import com.moveo.garage.model.Wheel;
 import com.moveo.garage.model.vehicle.Vehicle;
 import com.moveo.garage.repository.VehicleRepository;
-import com.moveo.garage.repository.WheelRepository;
 
 @Service
 @Transactional
 public class VehicleService {
 	@Autowired
 	private VehicleRepository repo;
-	@Autowired
-	private WheelRepository wheelRepo;
 	@Autowired
 	private NullUtil nullUtil;
 	
@@ -30,6 +26,7 @@ public class VehicleService {
 	 * @param vehicle
 	 * @return the given vehicle after being saved and given id
 	 */
+	@Transactional(readOnly = false)
 	public Vehicle addVehicle(Vehicle vehicle) {
 		if(vehicle != null) {
 			return repo.save(vehicle);
@@ -45,8 +42,8 @@ public class VehicleService {
 	 * @throws NotFoundException - if no such vehicle was found
 	 */
 	@Transactional(readOnly = false)
-	public void addEnergyByLicence(String licence, double energy) {
-		Vehicle vehicle = getByLicence(licence);
+	public void addEnergyByLicense(String license, double energy) {
+		Vehicle vehicle = getByLicense(license);
 		double filled = vehicle.getAvailableEnergyPercentage()+energy;
 		if(filled>100) {
 			filled = 100;
@@ -64,17 +61,17 @@ public class VehicleService {
 	 * @throws NotFoundException - if no such vehicle was found
 	 */
 	@Transactional(readOnly = false)
-	public void fillEnergyByLicence(String licence) {
-		Vehicle vehicle = getByLicence(licence);
-		vehicle.setAvailableEnergyPercentage(100.0);
+	public void fillEnergyByLicense(String license) {
+		Vehicle vehicle = getByLicense(license);
+		vehicle.addEnergy();
 		repo.save(vehicle);
 	}
 	
-	private Vehicle getByLicence(String licence) {
-		nullUtil.check(licence, "liscence", "fill energy by liscence");
-		Optional<Vehicle> optionalVehicle = repo.findByLicence(licence);
+	private Vehicle getByLicense(String license) {
+		nullUtil.check(license, "liscense", "fill energy by liscence");
+		Optional<Vehicle> optionalVehicle = repo.findByLicense(license);
 		if(optionalVehicle.isEmpty()) {
-			throw new NotFoundException("vehicle: "+licence);
+			throw new NotFoundException("vehicle: "+license);
 		}
 		return optionalVehicle.get();
 	}
@@ -85,9 +82,9 @@ public class VehicleService {
 	 * @return optional of the vehicle if one exists
 	 * @throws NullException- if licence is null
 	 */
-	public Optional<Vehicle> getOneVehicle(String licence) {
-		nullUtil.check(licence, "licence", "get one vehicle");
-		return repo.findByLicence(licence);
+	public Optional<Vehicle> getOneVehicle(String license) {
+		nullUtil.check(license, "license", "get one vehicle");
+		return repo.findByLicense(license);
 	}
 	
 	/**
@@ -99,27 +96,58 @@ public class VehicleService {
 	}
 	
 	/**
+	 * 
+	 * @return all the vehicles sorted by licence in ascending order
+	 */
+	public List<Vehicle> getAllVehiclesLicenceSorted() {
+		return repo.findByOrderByLicenseAsc();
+	}
+	
+	/**
+	 * 
+	 * @return all the vehicles sorted by module name in ascending order
+	 */
+	public List<Vehicle> getAllVehiclesModelSorted() {
+		return repo.findByOrderByModelNameAsc();
+	}
+	
+	/**
+	 * 
+	 * @return all the vehicles sorted by available energy percentage in descending order
+	 */
+	public List<Vehicle> getAllVehiclesEnergySorted() {
+		return repo.findByOrderByAvailableEnergyPercentageDesc();
+	}
+	
+	/**
 	 * sets all pressure of the vehicle's car to their max pressure
 	 * @param licence
 	 * @throws NullException- if licence is null
 	 * @throws NotFoundException - if no such vehicle was found
 	 */
-	public void inflateTires(String licence) {
-		Vehicle vehicle = getByLicence(licence);
-		inflateTires(vehicle.getId());
+	public void inflateTires(String license) {
+		Vehicle vehicle = getByLicense(license);
+		inflateTires(vehicle);
 	}
 	
 	/**
 	 * sets all pressure of the vehicle's car to their max pressure
 	 * @param vehicleId
 	 * @throws NullException- if id is null
+	 * @throws NotFoundException - if no such vehicle was found
 	 */
 	public void inflateTires(Integer vehicleId) {
 		nullUtil.check(vehicleId, "vehicle id", "inflate tires");
-		List<Wheel> wheels = wheelRepo.findByVehicleId(vehicleId);
-		for (Wheel wheel : wheels) {
-			wheel.setPressure(wheel.getMaxPressure());
-			wheelRepo.save(wheel);
+		Optional<Vehicle> optionalVehicle = repo.findById(vehicleId);
+		if(optionalVehicle.isEmpty()) {
+			throw new NotFoundException("vehicle");
 		}
+		inflateTires(optionalVehicle.get());
 	}
+	
+	private void inflateTires(Vehicle vehicle) {
+		vehicle.inflateTires();
+		repo.save(vehicle);
+	}
+	
 }

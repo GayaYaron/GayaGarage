@@ -11,4 +11,8 @@ public class RegularMotorcycle extends Motorcycle {
 	public RegularMotorcycle() {
 		setEnergySource(EnergySource.FUEL_TANK);
 	}
+
+	public RegularMotorcycle(String modelName, Double availableEnergyPercentage, String license) {
+		super(modelName, availableEnergyPercentage, license);
+	}
 }

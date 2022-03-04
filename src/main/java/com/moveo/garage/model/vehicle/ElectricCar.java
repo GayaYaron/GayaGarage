@@ -11,4 +11,8 @@ public class ElectricCar extends Car {
 	public ElectricCar() {
 		setEnergySource(EnergySource.BATTERY);
 	}
+
+	public ElectricCar(String modelName, Double availableEnergyPercentage, String license) {
+		super(modelName, availableEnergyPercentage, license);
+	}
 }

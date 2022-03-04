@@ -11,4 +11,8 @@ public class ElectricMotorcycle extends Motorcycle {
 	public ElectricMotorcycle() {
 		setEnergySource(EnergySource.BATTERY);
 	}
+
+	public ElectricMotorcycle(String modelName, Double availableEnergyPercentage, String license) {
+		super(modelName, availableEnergyPercentage, license);
+	}
 }

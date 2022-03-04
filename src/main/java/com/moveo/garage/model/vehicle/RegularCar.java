@@ -11,4 +11,10 @@ public class RegularCar extends Car {
 	public RegularCar() {
 		setEnergySource(EnergySource.FUEL_TANK);
 	}
+
+	public RegularCar(String modelName, Double availableEnergyPercentage, String license) {
+		super(modelName, availableEnergyPercentage, license);
+	}
+	
+	
 }
