@@ -12,6 +12,7 @@ public class Track extends Vehicle {
 
 	public Track(String modelName, Double availableEnergyPercentage, String license) {
 		super(modelName, availableEnergyPercentage, license);
+		this.wheelAmount = 16;
 	}
 	
 }

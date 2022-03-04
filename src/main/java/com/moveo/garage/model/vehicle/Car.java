@@ -12,5 +12,6 @@ public abstract class Car extends Vehicle {
 
 	public Car(String modelName, Double availableEnergyPercentage, String license) {
 		super(modelName, availableEnergyPercentage, license);
+		this.wheelAmount = 4;
 	}
 }

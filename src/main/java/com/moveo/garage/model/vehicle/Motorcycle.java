@@ -12,5 +12,6 @@ public abstract class Motorcycle extends Vehicle {
 
 	public Motorcycle(String modelName, Double availableEnergyPercentage, String license) {
 		super(modelName, availableEnergyPercentage, license);
+		this.wheelAmount = 2;
 	}
 }
