@@ -16,17 +16,24 @@ import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.moveo.garage.exception.MismatchingWheelAmountException;
 import com.moveo.garage.model.EnergySource;
 import com.moveo.garage.model.Wheel;
 
 import lombok.NoArgsConstructor;
 
-
 @Entity
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "vehicle_type", discriminatorType = DiscriminatorType.STRING)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "vehicleType")
+@JsonSubTypes({ @JsonSubTypes.Type(value = ElectricCar.class, name = "ElectricCar"),
+		@JsonSubTypes.Type(value = RegularCar.class, name = "RegularCar"),
+		@JsonSubTypes.Type(value = ElectricMotorcycle.class, name = "ElectricMotorcycle"),
+		@JsonSubTypes.Type(value = RegularMotorcycle.class, name = "RegularMotorcycle"),
+		@JsonSubTypes.Type(value = Truck.class, name = "Truck") })
 public abstract class Vehicle {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -102,11 +109,11 @@ public abstract class Vehicle {
 	public List<Wheel> getWheels() {
 		return wheels;
 	}
-	
+
 	public void addEnergy() {
 		setAvailableEnergyPercentage(100.0);
 	}
-	
+
 	public void inflateTires() {
 		for (Wheel wheel : wheels) {
 			wheel.inflate();

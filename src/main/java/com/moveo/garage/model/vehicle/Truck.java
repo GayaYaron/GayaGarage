@@ -5,12 +5,12 @@ import javax.persistence.Entity;
 
 @Entity
 @DiscriminatorValue(value = "TRUCK")
-public class Track extends Vehicle {
-	public Track() {
+public class Truck extends Vehicle {
+	public Truck() {
 		this.wheelAmount = 16;
 	}
 
-	public Track(String modelName, Double availableEnergyPercentage, String license) {
+	public Truck(String modelName, Double availableEnergyPercentage, String license) {
 		super(modelName, availableEnergyPercentage, license);
 		this.wheelAmount = 16;
 	}
