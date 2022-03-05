@@ -15,7 +15,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.moveo.garage.exception.MismatchingWheelAmountException;
@@ -43,7 +42,6 @@ public abstract class Vehicle {
 	private String modelName;
 	private Double availableEnergyPercentage;
 	private String license;
-	@JsonIgnore
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "vehicle")
 	private List<Wheel> wheels;
 	protected Integer wheelAmount;
