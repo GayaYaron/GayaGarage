@@ -2,6 +2,7 @@ package com.moveo.garage.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,17 +29,32 @@ public class Wheel {
 	private Double pressure;
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Vehicle vehicle;
 
 	public void inflate() {
 		pressure = maxPressure;
 	}
 
-	public Wheel(Double maxPressure, Double pressure, Vehicle vehicle) {
+	public Wheel(Double maxPressure, Double pressure) {
 		super();
 		this.maxPressure = maxPressure;
-		this.pressure = pressure;
-		this.vehicle = vehicle;
+		setPressure(pressure);
+	}
+	
+	/**
+	 * sets the pressure while keeping it between 0 to max pressure
+	 * @param pressure
+	 */
+	public void setPressure(Double pressure) {
+		if(pressure!=null) {
+			if(pressure>maxPressure) {
+				this.pressure = maxPressure;
+			}else if(pressure<0) {
+				this.pressure = 0.0;
+			}else {
+				this.pressure = pressure;
+			}
+		}
 	}
 }

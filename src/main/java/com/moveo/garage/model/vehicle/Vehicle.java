@@ -2,6 +2,8 @@ package com.moveo.garage.model.vehicle;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -20,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.moveo.garage.exception.MismatchingWheelAmountException;
 import com.moveo.garage.model.EnergySource;
 import com.moveo.garage.model.Wheel;
+import com.sun.istack.NotNull;
 
 import lombok.NoArgsConstructor;
 
@@ -42,8 +45,12 @@ public abstract class Vehicle {
 	private String modelName;
 	private Double availableEnergyPercentage;
 	private String license;
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "vehicle")
+	@NotNull
+	@Column(nullable = false)
+	@OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Wheel> wheels;
+	@NotNull
+	@Column(nullable = false)
 	protected Integer wheelAmount;
 
 	/**
@@ -118,13 +125,6 @@ public abstract class Vehicle {
 		}
 	}
 
-	public Vehicle(String modelName, Double availableEnergyPercentage, String license) {
-		super();
-		this.modelName = modelName;
-		this.availableEnergyPercentage = availableEnergyPercentage;
-		this.license = license;
-	}
-
 	@Override
 	public String toString() {
 		return "Vehicle [energySource=" + energySource + ", modelName=" + modelName + ", availableEnergyPercentage="
@@ -182,4 +182,12 @@ public abstract class Vehicle {
 			return false;
 		return true;
 	}
+
+	public Vehicle(String modelName, Double availableEnergyPercentage, String license) {
+		super();
+		this.modelName = modelName;
+		this.availableEnergyPercentage = availableEnergyPercentage;
+		this.license = license;
+	}
+
 }

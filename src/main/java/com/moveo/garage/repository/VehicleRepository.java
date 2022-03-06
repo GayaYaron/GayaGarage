@@ -14,4 +14,5 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Integer>{
 	public List<Vehicle> findByOrderByLicenseAsc();
 	public List<Vehicle> findByOrderByModelNameAsc();
 	public List<Vehicle> findByOrderByAvailableEnergyPercentageDesc();
+	public boolean existsByLicense(String license);
 }

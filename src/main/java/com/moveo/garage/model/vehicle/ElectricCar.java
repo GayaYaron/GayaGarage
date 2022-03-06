@@ -16,4 +16,5 @@ public class ElectricCar extends Car {
 		super(modelName, availableEnergyPercentage, license);
 		setEnergySource(EnergySource.BATTERY);
 	}
+	
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.moveo.garage.controller.util.ErrorDetail;
+import com.moveo.garage.exception.AlreadyExistsException;
 import com.moveo.garage.exception.MismatchingWheelAmountException;
 import com.moveo.garage.exception.NotFoundException;
 import com.moveo.garage.exception.NullException;
@@ -39,6 +40,12 @@ public class GarageExceptionHandler {
 	public ErrorDetail nullException(NullException e) {
 		return new ErrorDetail(HttpStatus.UNPROCESSABLE_ENTITY.value(), ExceptionCode.NULL_EXCEPTION.getCode(),
 				e.getMessage());
+	}
+
+	@ExceptionHandler(AlreadyExistsException.class)
+	@ResponseStatus(HttpStatus.CONFLICT)
+	public ErrorDetail alreadyExists(AlreadyExistsException e) {
+		return new ErrorDetail(HttpStatus.CONFLICT.value(), ExceptionCode.ALREADY_EXISTS.getCode(), e.getMessage());
 	}
 
 }

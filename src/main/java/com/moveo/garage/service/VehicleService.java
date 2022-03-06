@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.moveo.garage.exception.AlreadyExistsException;
 import com.moveo.garage.exception.NotFoundException;
 import com.moveo.garage.exception.util.NullUtil;
 import com.moveo.garage.model.vehicle.Vehicle;
@@ -25,10 +26,17 @@ public class VehicleService {
 	 * if null - returns null
 	 * @param vehicle
 	 * @return the given vehicle after being saved and given id
+	 * @throws NullException - if vehicle has no license and/or has no wheels
+	 * @throws AlreadyExistsException - if a vehicle with such license already exists
 	 */
 	@Transactional(readOnly = false)
 	public Vehicle addVehicle(Vehicle vehicle) {
 		if(vehicle != null) {
+			nullUtil.check(vehicle.getLicense(), "license", "add vehicle");
+			nullUtil.check(vehicle.getWheels(), "wheels", "add vehicle");
+			if(repo.existsByLicense(vehicle.getLicense())) {
+				throw new AlreadyExistsException("vehicle with license "+vehicle.getLicense());
+			}
 			return repo.save(vehicle);
 		}
 		return null;

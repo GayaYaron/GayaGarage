@@ -1,7 +1,7 @@
 package com.moveo.garage.exception.util;
 
 public enum ExceptionCode {
-	MISMATCHING_WHEEL_AMOUNT(1), NOT_FOUND(2), NULL_EXCEPTION(3);
+	MISMATCHING_WHEEL_AMOUNT(1), NOT_FOUND(2), NULL_EXCEPTION(3), ALREADY_EXISTS(4);
 
 	private int code;
 
